@@ -1,0 +1,43 @@
+<div class="container">
+    <div class="row">
+
+        <div class="col-lg-4">
+            <form [formGroup]="formGroup" class="form-frame">
+                <mat-form-field appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Placeholder" formControlName="name">
+
+                    <mat-hint>Enter name of the Argonaut here</mat-hint>
+                </mat-form-field>
+            </form>
+
+            <button type="button" class="btn btn-light" (click)="addNewArgonaut()">Light</button>
+        </div>
+
+
+        <div class="col-auto list">
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}}  </td>
+                </ng-container>
+
+                <!-- Rank Column -->
+                <ng-container matColumnDef="rank">
+                    <th mat-header-cell *matHeaderCellDef> Rank </th>
+                    <td mat-cell *matCellDef="let element"> <i class="fas fa-star"></i>  <i class="fas fa-times"></i> </td> 
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <button (click)="addNewArgonaut()"></button>
+            </table>
+
+        </div>
+
+
+
+    </div>
+</div>
