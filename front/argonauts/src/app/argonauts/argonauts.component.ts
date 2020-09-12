@@ -1,56 +1,74 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ArgonautsService } from '../services/argonauts.service';
 import { Argonaut } from '../models/argonaut.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { registerLocaleData } from '@angular/common';
-import { MatTableDataSource } from '@angular/material/table';
-
-
-const mockData = [
-  { name: 'Argounaut 1', rank: 1 },
-  { name: 'Argounaut 2', rank: 2 },
-  { name: 'Argounaut 3', rank: 3 },
-  { name: 'Argounaut 4', rank: 4 },
-  { name: 'Argounaut 5', rank: 5 }
-]
+import { MatTableDataSource, MatTable } from '@angular/material/table';
+import { MatSort, MatSortable } from '@angular/material/sort';
 
 @Component({
   selector: 'app-argonauts',
   templateUrl: './argonauts.component.html',
   styleUrls: ['./argonauts.component.scss']
 })
+
 export class ArgonautsComponent implements OnInit {
 
-  argonauts: Argonaut [] = [];
-  dataSource = [];
-  displayedColumns: string[] = ['name', 'rank'];
+  argonauts: Argonaut[] = [];
+  dataSource = new MatTableDataSource<Argonaut>(this.argonauts);
+  displayedColumns: string[] = ['id', 'name', 'delete'];
   newArgonaut: Argonaut = new Argonaut();
+  isAdded: boolean;
+  message = '';
 
   formGroup = new FormGroup({
-    name: new FormControl('', Validators.required),
-    rank: new FormControl('', Validators.required),
+    name: new FormControl('', Validators.required)
   });
 
-    constructor(private argonautsSevice: ArgonautsService) { }
+  constructor(private argonautsSevice: ArgonautsService) { }
 
+  @ViewChild(MatTable) table: MatTable<any>;
+  @ViewChild(MatSort) sort: MatSort;
 
-ngOnInit(): void {
-  this.argonautsSevice.getAllArgonauts().subscribe(data => {
-    this.argonauts = data;
-    console.log(this.argonauts)
-    this.dataSource = data;
-  });
-}
-
-
-  addNewArgonaut() {
-    this.newArgonaut.name = this.formGroup.value.name;
-    this.dataSource.push(this.newArgonaut);
-    console.log(this.newArgonaut)
-    this.argonautsSevice.postArgonaut(this.newArgonaut).subscribe((res: Response) => {
-      console.log('response is:', res);
+  ngOnInit(): void {
+    this.argonautsSevice.getAllArgonauts().subscribe(data => {
+      this.argonauts = data;
+      this.dataSource = new MatTableDataSource(this.argonauts);
+      this.sort.sort(({ id: 'id', start: 'desc' }) as MatSortable);
+      this.dataSource.sort = this.sort;
     });
   }
 
+  addNewArgonaut() {
+    if (this.formGroup.value.name !== '') {
+      this.newArgonaut.name = this.formGroup.value.name;
+      this.argonautsSevice.postArgonaut(this.newArgonaut).subscribe((res) => {
+        if (res.error === false) {
+          this.isAdded = true;
+          this.message = res.message;
+          this.newArgonaut.id = res.data;
+          this.argonauts.push(this.newArgonaut);
+          this.dataSource = new MatTableDataSource(this.argonauts);
+          this.dataSource.sort = this.sort;
+        } else {
+          this.message = 'Error in communicating with server, please try later.';
+        }
+      });
+    } else {
+      this.isAdded = true;
+      this.message = 'Please enter the name of the Argonaut';
+    }
+  }
 
+  deleteArgonaut(argonaut, index) {
+    this.argonautsSevice.deleteArgonaut(argonaut.id).subscribe(resp => {
+        this.argonauts.splice(this.argonauts.findIndex(item => item.id === index), 1);
+        this.dataSource = new MatTableDataSource(this.argonauts);
+        this.dataSource.sort = this.sort;
+        this.isAdded = true;
+        this.message = resp.message;
+        setTimeout(() => {
+          this.message = '';
+        }, 1000);
+    });
+  }
 }

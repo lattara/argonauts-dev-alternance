@@ -1,43 +1,53 @@
 <div class="container">
-    <div class="row">
-
-        <div class="col-lg-4">
-            <form [formGroup]="formGroup" class="form-frame">
-                <mat-form-field appearance="outline">
-                    <mat-label>Name</mat-label>
-                    <input matInput placeholder="Placeholder" formControlName="name">
-
-                    <mat-hint>Enter name of the Argonaut here</mat-hint>
-                </mat-form-field>
-            </form>
-
-            <button type="button" class="btn btn-light" (click)="addNewArgonaut()">Light</button>
+    <div class="row image">
+        <div class="col-12 title"> <span>Argonauts sign in sheet</span>
         </div>
-
-
-        <div class="col-auto list">
-            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+            <div class="">
+                <form [formGroup]="formGroup" class="form-frame">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Name</mat-label>
+                        <input matInput placeholder="Placeholder" formControlName="name">
+                        <mat-hint class="hint">Enter name of the Argonaut here</mat-hint>
+                    </mat-form-field>
+                    <div class="button-container">
+                    <button type="button" class="btn btn-light col-12" (click)="addNewArgonaut()">Add</button>
+                    </div>
+                </form>
+                <!-- Messages  -->
+                <div class="messages-container col-12">
+                    <span *ngIf="isAdded === true" class="message-text"> {{message}} </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 table-container">
+            <table mat-table [dataSource]="dataSource" matSort >
                 <!-- Name Column -->
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> id
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.id}}
+                    </td>
+                </ng-container>
                 <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef> Name </th>
-                    <td mat-cell *matCellDef="let element"> {{element.name}}  </td>
+                    <th mat-header-cell *matHeaderCellDef> Name
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.name}}
+                    </td>
                 </ng-container>
-
-                <!-- Rank Column -->
-                <ng-container matColumnDef="rank">
-                    <th mat-header-cell *matHeaderCellDef> Rank </th>
-                    <td mat-cell *matCellDef="let element"> <i class="fas fa-star"></i>  <i class="fas fa-times"></i> </td> 
+                <ng-container matColumnDef="delete">
+                    <th mat-header-cell *matHeaderCellDef> Delete
+                    </th>
+                    <td mat-cell *matCellDef="let element; let i = index">
+                        <i class="fas fa-times"  #tooltip="matTooltip"
+                        matTooltip="Delete Argonaut" (click)="deleteArgonaut(element, i)"></i>
+                    </td>
                 </ng-container>
-
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                <button (click)="addNewArgonaut()"></button>
             </table>
-
         </div>
-
-
-
     </div>
 </div>
