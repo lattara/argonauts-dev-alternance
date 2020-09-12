@@ -9,8 +9,8 @@
 <img src = "front/argonauts/src/assets/screenshot.png"/>
 
 <h3>Short demo of the project</h3>
-<video width="320" height="240" controls>
-  <source src="front/argonauts/src/assets/demo.mp4" type="video/mp4">
-</video>
+![Alt Text](front/argonauts/src/assets/demo_gif.gif)
+
+<p>Video demo of the project can be found in assets folder</p>
 
 
