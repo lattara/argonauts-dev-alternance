@@ -10,7 +10,7 @@
 
 <h3>Short demo of the project</h3>
 
-![Alt Text](front/argonauts/src/assets/demo_gif.gif)
+![Alt Text](front/argonauts/src/assets/demo.gif)
 
 <p>Video demo of the project can be found in assets folder</p>
 
