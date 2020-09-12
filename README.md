@@ -6,7 +6,7 @@
 
 <h3>Screenshot of the project</h3>
 
-<img src = "/assets/screenshot.png"/>
+<img src = "front/argonauts/src/assets/screenshot.png"/>
 
 <h3>Short demo of the project</h3>
 <video width="320" height="240" controls>
