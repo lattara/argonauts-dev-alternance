@@ -11,11 +11,9 @@ const Argonaut = function (argonaut) {
 Argonaut.create = function (newArgonaut, result) {
     dbConn.query("INSERT INTO argo set ?", newArgonaut, function (err, res) {
         if (err) {
-            console.log("error: ", err);
             result(err, null);
         }
         else {
-            console.log(res.insertId);
             result(null, res.insertId);
         }
     });
@@ -24,7 +22,6 @@ Argonaut.create = function (newArgonaut, result) {
 Argonaut.findById = function (id, result) {
     dbConn.query("Select * from argo where id = ? ", id, function (err, res) {
         if (err) {
-            console.log("error: ", err);
             result(err, null);
         }
         else {
@@ -36,20 +33,17 @@ Argonaut.findById = function (id, result) {
 Argonaut.findAll = function (result) {
     dbConn.query("Select * from argo", function (err, res) {
         if (err) {
-            console.log("error: ", err);
             result(null, err);
         }
         else {
-            console.log('argonauts : ', res);
             result(null, res);
         }
     });
 };
 
 Argonaut.update = function (id, arg, result) {
-    dbConn.query("UPDATE argo SET name=?, rank=? WHERE id = ?", [arg.name, arg.rank, id], function (err, res) {
+    dbConn.query("UPDATE argo SET name=? WHERE id = ?", [arg.name, id], function (err, res) {
         if (err) {
-            console.log("error: ", err);
             result(null, err);
         } else {
             result(null, res);
@@ -59,7 +53,6 @@ Argonaut.update = function (id, arg, result) {
 Argonaut.delete = function (id, result) {
     dbConn.query("DELETE FROM argo WHERE id = ?", [id], function (err, res) {
         if (err) {
-            console.log("error: ", err);
             result(null, err);
         }
         else {
