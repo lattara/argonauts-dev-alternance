@@ -61,7 +61,7 @@ export class ArgonautsComponent implements OnInit {
 
   deleteArgonaut(argonaut, index) {
     this.argonautsSevice.deleteArgonaut(argonaut.id).subscribe(resp => {
-        this.argonauts.splice(this.argonauts.findIndex(item => item.id === index), 1);
+        this.argonauts.splice(this.argonauts.findIndex(item => item.id === argonaut.id), 1);
         this.dataSource = new MatTableDataSource(this.argonauts);
         this.dataSource.sort = this.sort;
         this.isAdded = true;
